@@ -26,16 +26,16 @@ function Gallery() {
                     gap={8}
                 >
                     {imgData.map((item, index) => (
-                         <Link key={index} to={"/whisky/" + index}>
-                        <ImageListItem key={item.img}>
-                            <img
-                                srcSet={item.img}
-                                src={item.img}
-                                alt={item.title}
-                                loading="lazy"
-                            />
-                            <ImageListItemBar position="bottom" title={item.title} />
-                        </ImageListItem>
+                        <Link key={index} to={"/whisky/" + index}>
+                            <ImageListItem key={item.img}>
+                                <img
+                                    srcSet={item.img}
+                                    src={item.img}
+                                    alt={item.title}
+                                    loading="lazy"
+                                />
+                                <ImageListItemBar position="bottom" title={item.title} />
+                            </ImageListItem>
                         </Link>
                     ))}
                 </ImageList>

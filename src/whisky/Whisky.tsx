@@ -4,19 +4,19 @@ import Navbar from "../components/Navbar";
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Footer from "../components/Footer";
 
 function Whisky() {
   const { id } = useParams();
   const index = Number(id);
   const whisky = structures[index];
-  
+
   return (
     <div>
       <Navbar active="1" />
 
       <Container sx={{ mt: 3 }}>
 
-        {/* Хлебные крошки */}
         <Typography sx={{ mb: 2 }}>
           <Link to="/" style={{ textDecoration: "none" }}>
             Главная
@@ -54,6 +54,7 @@ function Whisky() {
           </Box>
         </Box>
       </Container>
+      <Footer />
     </div>
   );
 }

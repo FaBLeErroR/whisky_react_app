@@ -57,7 +57,6 @@ function Chart() {
             <GroupChart data={groupData} series={series} isBar={isBar} />
 
             <SettingChart series={series} setSeries={setSeries} isBar={isBar} setIsBar={setIsBar} />
-
             <Footer />
         </div>
     );

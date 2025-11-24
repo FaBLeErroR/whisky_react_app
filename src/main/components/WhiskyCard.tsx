@@ -6,23 +6,25 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
+import { Link } from 'react-router-dom';
 
 interface ComponentProps {
-    building: {
+    whisky: {
         img: string,
         title: string,
         description: string[],
     };
     index: number;
+    bottleIndex: number;
 }
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.secondary,
-  textAlign: 'justify',
-  marginBottom: theme.spacing(2),
+    color: theme.palette.text.secondary,
+    textAlign: 'justify',
+    marginBottom: theme.spacing(2),
 }));
 
-function WhiskyCard({ building, index }: ComponentProps) {
+function WhiskyCard({ whisky, index, bottleIndex }: ComponentProps) {
 
     return (
         <Card
@@ -34,23 +36,30 @@ function WhiskyCard({ building, index }: ComponentProps) {
         >
             <CardMedia
                 component="img"
-                alt={building.title}
-                image={building.img}
+                alt={whisky.title}
+                image={whisky.img}
             />
             <Box>
                 <CardContent>
                     <Typography gutterBottom variant="h5" >
-                        {building.title}
+                        {whisky.title}
                     </Typography>
-                    {building.description.map((item, ind) => (
+                    {whisky.description.map((item, ind) => (
                         <StyledTypography key={ind} variant="body2">
                             {item}
                         </StyledTypography>
                     ))}
                 </CardContent>
-                <CardActions sx={{ justifyContent: index % 2 === 1 ? 'end' : 'start' }}>
-                    <Button size="small">Подробнее</Button>
-                </CardActions>
+                <Link key={index} to={"/whisky/" + bottleIndex}
+                    style={{
+                        textDecoration: 'none',
+                        color: 'inherit'
+                    }}
+                >
+                    <CardActions sx={{ justifyContent: index % 2 === 1 ? 'end' : 'start' }}>
+                        <Button size="small">Подробнее</Button>
+                    </CardActions>
+                </Link>
             </Box>
         </Card>
     )
