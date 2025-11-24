@@ -3,13 +3,41 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+
+import List from "./list/List";
+import Main from "./main/Main";
+import Whisky from './whisky/Whisky';
+import Chart from './chart/Chart'
+
+const router = createBrowserRouter([
+  {
+    path: "",
+    element: <Main />,
+  },
+  {
+    path: "/list",
+    element: <List />,
+  },
+  {
+    path: "/whisky/:id",
+    element: <Whisky />,
+  },
+  {
+    path: "/chart",
+    element: <Chart />,
+  },
+]);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 

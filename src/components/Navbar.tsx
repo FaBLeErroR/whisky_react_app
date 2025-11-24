@@ -11,6 +11,7 @@ import Drawer from '@mui/material/Drawer';
 import React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
+import { Link } from 'react-router-dom';
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
     display: 'flex',
@@ -48,27 +49,33 @@ function Navbar({ active }: ComponentProps) {
                         Японский виски
                     </Typography>
                     <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                        <Button
-                            variant={active === '1' ? 'contained' : 'text'}
-                            color="info"
-                            size="medium"
-                        >
-                            Главная
-                        </Button>
-                        <Button
-                            variant={active === '2' ? 'contained' : 'text'}
-                            color="info"
-                            size="medium"
-                        >
-                            Отзывы
-                        </Button>
-                        <Button
-                            variant={active === '3' ? 'contained' : 'text'}
-                            color="info"
-                            size="medium"
-                        >
-                            Контакты
-                        </Button>
+                        <Link to="/">
+                            <Button
+                                variant={active === '1' ? 'contained' : 'text'}
+                                color="info"
+                                size="medium"
+                            >
+                                Главная
+                            </Button>
+                        </Link>
+                        <Link to="/list">
+                            <Button
+                                variant={active === '2' ? 'contained' : 'text'}
+                                color="info"
+                                size="medium"
+                            >
+                                Отзывы
+                            </Button>
+                        </Link>
+                        <Link to='/chart/'>
+                            <Button
+                                variant={active === '3' ? 'contained' : 'text'}
+                                color="info"
+                                size="medium"
+                            >
+                                Контакты
+                            </Button>
+                        </Link>
                     </Box>
 
                     <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
@@ -91,36 +98,52 @@ function Navbar({ active }: ComponentProps) {
                                         <CloseRoundedIcon />
                                     </IconButton>
                                 </Box>
-                                <MenuItem
-                                    sx={{
-                                        backgroundColor: active === '1' ? '#319be2ff' : 'transparent',
-                                        '&:hover': {
-                                            backgroundColor: '#80b7dbac',
-                                        },
+                                <Link to="/"
+                                    style={{
+                                        textDecoration: 'none',
+                                        color: 'inherit'
                                     }}
                                 >
-                                    Главная
-                                </MenuItem>
-                                <MenuItem
-                                    sx={{
-                                        backgroundColor: active === '2' ? '#319be2ff' : 'transparent',
-                                        '&:hover': {
-                                            backgroundColor: '#80b7dbcf',
-                                        },
+                                    <MenuItem
+                                        sx={{
+                                            backgroundColor: active === '1' ? '#319be2ff' : 'transparent',
+                                            '&:hover': {
+                                                backgroundColor: '#80b7dbac',
+                                            },
+                                        }}
+                                    >
+                                        Главная
+                                    </MenuItem>
+                                </Link>
+                                <Link to='/list/'
+                                    style={{
+                                        textDecoration: 'none',
+                                        color: 'inherit'
                                     }}
                                 >
-                                    Список зданий
-                                </MenuItem>
-                                <MenuItem
-                                    sx={{
-                                        backgroundColor: active === '2' ? '#319be2ff' : 'transparent',
-                                        '&:hover': {
-                                            backgroundColor: '#80b7dbcf',
-                                        },
-                                    }}
-                                >
-                                    Контакты
-                                </MenuItem>
+                                    <MenuItem
+                                        sx={{
+                                            backgroundColor: active === '2' ? '#319be2ff' : 'transparent',
+                                            '&:hover': {
+                                                backgroundColor: '#80b7dbcf',
+                                            },
+                                        }}
+                                    >
+                                        Список зданий
+                                    </MenuItem>
+                                </Link>
+                                <Link to='/chart/'>
+                                    <MenuItem
+                                        sx={{
+                                            backgroundColor: active === '3' ? '#319be2ff' : 'transparent',
+                                            '&:hover': {
+                                                backgroundColor: '#80b7dbcf',
+                                            },
+                                        }}
+                                    >
+                                        Диаграммы
+                                    </MenuItem>
+                                </Link>
                             </Box>
                         </Drawer>
                     </Box>

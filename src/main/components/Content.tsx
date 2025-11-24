@@ -1,6 +1,6 @@
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import structures from "../data";
+import structures from "../../data";
 import WhiskyCard from './WhiskyCard';
 
 const cardData = [structures[7], structures[6], structures[0], structures[5]]

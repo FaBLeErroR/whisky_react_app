@@ -29,7 +29,7 @@ function WhiskyCard({ building, index }: ComponentProps) {
             sx={{
                 display: 'flex',
                 flexDirection: index % 2 === 1 ? 'row' : 'row-reverse',
-                height: '100%',
+                height: '400px',
             }}
         >
             <CardMedia
