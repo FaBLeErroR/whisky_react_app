@@ -8,10 +8,10 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
-import List from "./list/List";
-import Main from "./main/Main";
-import Whisky from './whisky/Whisky';
-import Chart from './chart/Chart'
+import List from "./features/list/presentation/List";
+import Main from "./features/main/Main";
+import Whisky from './features/whisky/Whisky';
+import Chart from './features/chart/presentation/Chart'
 
 const router = createBrowserRouter([
   {
