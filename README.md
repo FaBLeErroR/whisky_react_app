@@ -1,46 +1,137 @@
-# Getting Started with Create React App
+## Японский виски
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Код писался согласно чистой архитектуре все страницы были вынесены в отдельные фичи, внутри которых было добавлено разделение на слои данных, бмзнесс-логики и ui. Все компоненты, используемые в нескольких фичах лежат в папке core.
 
-## Available Scripts
+# Для запросов к api используется библиотека axios
 
-In the project directory, you can run:
+```
+import axios from "axios";
+import { BASE_API_URL } from "./endpoints";
 
-### `npm start`
+const http = axios.create({
+  baseURL: BASE_API_URL,
+  auth: {
+    username: "student",
+    password: "dvfu",
+  },
+  withCredentials: true,
+});
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+export default http;
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Для запросов сконфигурирован базовый uri, а также данные пользователя сразу передаются с запросом.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Data слой
 
-### `npm run build`
+В data слое реализованы data_source, dto и repository
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+В data_source содержатся запросы приложения к api
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+async getBrandStatistic(): Promise<StatisticDTO[]> {
+    const resp = await http.get(`${this.basePath}/brands/`);
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    const parsed = StatisticResponseSchema.safeParse(resp.data);
+    if (!parsed.success) {
+      throw new Error("Invalid response format: " + parsed.error.message);
+    }
 
-### `npm run eject`
+    return parsed.data.statistic;
+  }
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Ответ парсится в DTO
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+import { z } from "zod";
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+export const StatisticDTOSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  review_count: z.number(),
+  avg_length: z.number(),
+  min_length: z.number(),
+  max_length: z.number(),
+});
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+export type StatisticDTO = z.infer<typeof StatisticDTOSchema>;
 
-## Learn More
+export const StatisticResponseSchema = z.object({
+  success: z.boolean(),
+  statistic: z.array(StatisticDTOSchema),
+});
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+export type StatisticResponse = z.infer<typeof StatisticResponseSchema>;
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+В dto реализован метод парсинга файла из json при помощи библиотеки zod.
+
+
+Далее в файле repositor_impl dto преобразуется в entity
+
+```
+async getBrandStatistic(): Promise<StatisticEntity[]> {
+    const dto = await this.remote.getBrandStatistic();
+
+    return dto.map(d => new StatisticEntity(
+      d.id,
+      d.name,
+      d.review_count,
+      d.avg_length,
+      d.min_length,
+      d.max_length
+    ));
+  }
+```
+
+# Domain слой
+
+В domain слое приложения находятся entity, а также use_cases
+
+```
+export class StatisticEntity {
+  constructor(
+    public readonly id: number,
+    public readonly name: string,
+    public readonly review_count: number,
+    public readonly avg_length: number,
+    public readonly min_length: number,
+    public readonly max_length: number
+  ) {}
+}
+```
+
+Entity содержит объект, преобразованный из dto и пригодный для дальнейшей работы
+
+```
+import { ChartRepository } from "../repository/ChartRepository";
+import { StatisticEntity } from "../entity/StatisticEntity";
+
+export class GetBottleStatisticUseCase {
+  constructor(private repository: ChartRepository) {}
+
+  async execute(): Promise<StatisticEntity[]> {
+    return this.repository.getBottleStatistic();
+  }
+}
+
+```
+
+use_cases нужны для обработки информации полученной с бэка и передачи ее в ui слой.
+
+# UI слой
+
+В ui слое происзодит отображение данных. Для отображения entity нужно было преобразовать
+
+```
+const mapped = result.map((r) => ({
+            Группа: r.name,
+            "Количество отзывов": r.review_count,
+            "Максимальная длина": r.max_length,
+            "Средняя длина": r.avg_length,
+            "Минимальная длина": r.min_length,
+        }));
+```
+
